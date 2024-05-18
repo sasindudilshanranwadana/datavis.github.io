@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="details.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="details.html">Details</a></li>
+                <li><a href="comparison.html">Comparison</a></li>
+                <li><a href="deathrate.html">Death Rate</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h1>Country Details: <span id="countryName"></span></h1>
+            <p>Select a year to view detailed healthcare workforce data for the selected country.</p>
+        </section>
+        <section class="content">
+            <label for="yearSelect">Select Year:</label>
+            <select id="yearSelect"></select>
+            <div id="line-chart"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Healthcare Visualization Developed by Sasindu and Senuda</p>
+    </footer>
+</body>
+</html>

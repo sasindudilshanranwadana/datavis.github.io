@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Death Rate Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="deathrate.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="details.html">Details</a></li>
+                <li><a href="comparison.html">Comparison</a></li>
+                <li><a href="deathrate.html">Death Rate</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h1>Death Rate Visualization</h1>
+            <p>Select a country and year to analyze the death rate in relation to the healthcare workforce.</p>
+        </section>
+        <section class="content">
+            <div class="controls">
+                <label for="country">Select Country:</label>
+                <select id="country">
+                    <option value="AUS">Australia</option>
+                    <option value="CAN">Canada</option>
+                    <option value="GBR">United Kingdom</option>
+                </select>
+                <label for="year">Select Year:</label>
+                <select id="year">
+                    <!-- Years will be dynamically populated -->
+                </select>
+            </div>
+            <div id="line-chart"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Healthcare Visualization Developed by Sasindu and Senuda</p>
+    </footer>
+</body>
+</html>
