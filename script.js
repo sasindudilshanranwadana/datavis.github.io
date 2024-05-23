@@ -30,7 +30,7 @@ var world, dataByCountryYear = {};
 
 Promise.all([
     d3.json("World_Map.geojson"),
-    d3.csv("HEALTH_WF_All Data.csv")
+    d3.csv("HEALTH_WFMI.csv")
 ]).then(function([worldData, data]) {
     world = worldData;
 
