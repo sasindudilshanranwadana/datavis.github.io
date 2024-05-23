@@ -30,7 +30,7 @@ var world, dataByCountryYear = {};
 
 Promise.all([
     d3.json("World_Map.geojson"),
-    d3.csv("HEALTH_WF_All Data.csv")
+    d3.csv("HEALTH_WFMI.csv")
 ]).then(function([worldData, data]) {
     world = worldData;
 
@@ -65,29 +65,38 @@ Promise.all([
         })
         .attr("stroke", "#fff")
         .attr("stroke-width", "0.5px")
+        .classed("no-data", function(d) {
+            return !dataByCountryYear[d.properties.ISO_A3];
+        })
         .on("mouseover", function(event, d) {
             var countryData = dataByCountryYear[d.properties.ISO_A3];
-            var value = countryData ? d3.mean(Object.values(countryData)) : 0;
-            tooltip.transition().duration(200).style("opacity", .9);
-            tooltip.html(d.properties.NAME + "<br/>" + value.toLocaleString())
-                .style("left", (event.pageX) + "px")
-                .style("top", (event.pageY - 28) + "px");
+            if (countryData) {
+                var value = d3.mean(Object.values(countryData));
+                tooltip.transition().duration(200).style("opacity", .9);
+                tooltip.html(d.properties.NAME + "<br/>" + value.toLocaleString())
+                    .style("left", (event.pageX) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            }
         })
         .on("mouseout", function(d) {
             tooltip.transition().duration(500).style("opacity", 0);
         })
         .on("click", function(event, d) {
-            console.log("Clicked on country:", d.properties.NAME, d.properties.ISO_A3);
-            window.localStorage.setItem('selectedCountryISO', d.properties.ISO_A3);
-            window.localStorage.setItem('selectedCountryName', d.properties.NAME);
-            var newWindow = window.open("details.html", '_blank');
-            if (newWindow) {
-                newWindow.focus();
-            } else {
-                console.log("Popup blocked. Unable to open details.html");
+            var countryData = dataByCountryYear[d.properties.ISO_A3];
+            if (countryData) {
+                window.localStorage.setItem('selectedCountryISO', d.properties.ISO_A3);
+                window.localStorage.setItem('selectedCountryName', d.properties.NAME);
+                var newWindow = window.open("details.html", '_blank');
+                if (newWindow) {
+                    newWindow.focus();
+                } else {
+                    console.log("Popup blocked. Unable to open details.html");
+                }
             }
         });
 });
+
+// Ensure the map loads only after DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     // Smooth scroll for navigation links within the same page
     document.querySelectorAll('nav a').forEach(anchor => {

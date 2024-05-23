@@ -146,3 +146,8 @@ header, footer, .container {
         margin: 10px 0;
     }
 }
+.no-data {
+    fill: #ccc; /* Or any color you prefer for countries without data */
+    cursor: not-allowed;
+}
+
