@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const deathRateValue = +filteredDeathData[0].Total;
+        const deathRateValue = Math.round(+filteredDeathData[0].Total); // Round to whole number
         const healthWorkforceValue = +filteredHealthData[0].Value;
 
         // Normalize the values to balance the scales
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { label: 'Total Healthcare Workforce', value: healthWorkforceValue }
         ];
 
-        drawAreaChart(data, selectedCountry);
+        drawAreaChart(data, selectedCountry, deathRateValue); // Pass deathRateValue for display
     }
 
     function filterHealthData(country, year) {
@@ -86,10 +86,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return data.filter(d => d.COU === country && d.Year === year);
     }
 
-    function drawAreaChart(data, country) {
+    function drawAreaChart(data, country, deathRateValue) { // Receive deathRateValue for display
         const width = 800;
         const height = 500;
-        const margin = { top: 20, right: 30, bottom: 100, left: 50 };
+        const margin = { top: 20, right: 30, bottom: 100, left: 100 };
 
         const svg = d3.select('#line-chart').html('')
             .append('svg')
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .call(d3.axisBottom(x));
 
         svg.append('g')
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(y).ticks(10).tickFormat(d3.format('d'))); // Format Y axis ticks as integers
 
         const area = d3.area()
             .x(d => x(d.label))
@@ -164,5 +164,20 @@ document.addEventListener('DOMContentLoaded', function () {
             .attr('y', height + 30)
             .attr('text-anchor', 'middle')
             .text(d => d.label);
+
+        // Add X axis title
+        svg.append("text")
+            .attr("transform", `translate(${width / 2},${height + margin.bottom - 10})`)
+            .style("text-anchor", "middle")
+            .text("Healthcare Workforce Type");
+
+        // Add Y axis title
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left + 20)
+            .attr("x", 0 - height / 2)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Number of Workers");
     }
 });

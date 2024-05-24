@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateBarChart(docValues, nurValues) {
         const svg = d3.select('#line-chart').html('').append('svg').attr('width', 960).attr('height', 500);
-        const margin = { top: 20, right: 30, bottom: 50, left: 80 }; // Adjusted margins
+        const margin = { top: 20, right: 30, bottom: 70, left: 80 }; // Adjusted margins
         const width = svg.attr('width') - margin.left - margin.right;
         const height = svg.attr('height') - margin.top - margin.bottom;
 
@@ -149,7 +149,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const x = d3.scaleBand().domain(['Doctors', 'Nurses']).range([0, width]).padding(0.4);
         const y = d3.scaleLinear().domain([0, d3.max([...docValues, ...nurValues])]).nice().range([height, 0]);
 
-        g.append('g').attr('class', 'axis axis--x').attr('transform', `translate(0,${height})`).call(d3.axisBottom(x).tickSize(0));
+        g.append('g').attr('class', 'axis axis--x').attr('transform', `translate(0,${height})`)
+
+            .call(d3.axisBottom(x).tickSize(0));
+
         g.append('g').attr('class', 'axis axis--y').call(d3.axisLeft(y).ticks(10).tickFormat(d3.format("~s")));
 
         g.selectAll('.bar-doctors')
@@ -172,6 +175,36 @@ document.addEventListener('DOMContentLoaded', function () {
             .attr('height', d => height - y(d))
             .attr('fill', 'green');
 
+        // Add X axis title
+        g.append("text")
+            .attr("transform", `translate(${width / 2},${height + margin.bottom - 10})`)
+            .style("text-anchor", "middle")
+            .text("Healthcare Workforce Type");
+
+        // Add Y axis title
+        g.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left + 20)
+            .attr("x", 0 - height / 2)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Number of Workers");
+
+        // Add labels under the bars
+        g.append("text")
+            .attr("x", x('Doctors') + x.bandwidth() / 4)
+            .attr("y", height + 15)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .text("Doctors");
+
+        g.append("text")
+            .attr("x", x('Nurses') + 3 * x.bandwidth() / 4)
+            .attr("y", height + 15)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .text("Nurses");
+
         // Add labels to the bars
         if (docValues.length > 0) {
             g.append("text")
@@ -190,21 +223,5 @@ document.addEventListener('DOMContentLoaded', function () {
                 .style("fill", "green")
                 .text(nurValues[0]);
         }
-
-        // Add labels under the bars
-        g.append("text")
-            .attr("x", x('Doctors') + x.bandwidth() / 4)
-            .attr("y", height + 20)
-            .attr("text-anchor", "middle")
-            .style("fill", "black")
-            .text("Doctors");
-
-        g.append("text")
-            .attr("x", x('Nurses') + 3 * x.bandwidth() / 4)
-            .attr("y", height + 20)
-            .attr("text-anchor", "middle")
-            .style("fill", "black")
-            .text("Nurses");
     }
 });
-

@@ -99,6 +99,21 @@ document.addEventListener('DOMContentLoaded', function () {
             .attr('class', 'axis axis--y')
             .call(yAxis);
 
+        // Add X axis title
+        svg.append("text")
+            .attr("transform", `translate(${width / 2},${height + margin.bottom - 10})`)
+            .style("text-anchor", "middle")
+            .text("Healthcare Workforce Type");
+
+        // Add Y axis title
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left + 20)
+            .attr("x", 0 - height / 2)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Number of Workers");
+
         const line1 = d3.line().x(d => x(d.Year)).y(d => y(d.Value));
         const line2 = d3.line().x(d => x(d.Year)).y(d => y(d.Value));
 
@@ -155,10 +170,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .text(d => countries[d]);
     }
 
-    // Enhanced logging to check file paths
     console.log('Loading CSV files:', Object.values(files));
 
-    // Load each CSV file individually and log any specific errors
     Promise.all([
         d3.csv(files['AUS_DOC']).catch(error => console.error('Error loading AUS_DOC:', error)),
         d3.csv(files['AUS_NUR']).catch(error => console.error('Error loading AUS_NUR:', error)),
@@ -183,7 +196,6 @@ document.addEventListener('DOMContentLoaded', function () {
             gbrNurData: window.gbrNurData
         });
 
-        // Populate initial options for both dropdowns
         countrySelect1.innerHTML = '<option value="">--Select Country--</option>';
         for (const [code, name] of Object.entries(countries)) {
             const option1 = document.createElement('option');
@@ -197,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function () {
         countrySelect2.addEventListener('change', updateChart);
         typeSelect.addEventListener('change', updateChart);
 
-        // Initial chart update to reflect default selections
         updateChart();
     }).catch(function (error) {
         console.error('Error loading data:', error);
